@@ -8,7 +8,7 @@ import AddItemForm from "./AddItemForm/AddItemForm";
 export type FilterValuesType = "all" | "active" | "completed"
 
 
-type TodoListType = {
+ export type TodoListType = {
     id: string
     title: string
     filter: FilterValuesType
@@ -25,11 +25,12 @@ const App = () => {
     //business logic layer:
     const todoListId_1 = v1()
     const todoListId_2 = v1()
+
+
     const [todoLists, setTodoLists] = useState<TodoListStateType>([
         {id: todoListId_1, title: "What to learn ", filter: "all"},
         {id: todoListId_2, title: "What to buy", filter: "all"},
     ])
-
     const [tasks, setTasks] = useState<TaskStateType>({
         [todoListId_1]: [
             {id: v1(), title: "HTML&CSS", isDone: true},
@@ -52,13 +53,12 @@ const App = () => {
     // hook pulls the state of a component
 
     const removeTask = (taskId: string, todoListId: string) => {
-        //
+        //get next state// set next state
         setTasks({
             ...tasks,
             [todoListId]: tasks[todoListId].filter(t => t.id !== taskId)
         })
     }
-
     const addTask = (title: string, todoListId: string) => {
         const newTask: TaskType = {
             id: v1(),
@@ -68,10 +68,12 @@ const App = () => {
 
         setTasks({...tasks, [todoListId]: [newTask, ...tasks[todoListId]]})
     }
-
     const changeTaskStatus = (taskId: string, newIsDone: boolean, todoListId: string) => {
         setTasks({...tasks, [todoListId]: tasks[todoListId].map(el => el.id === taskId ? {...el, isDone: newIsDone} : el) }) //уточить про el.id === taskId
     }
+
+
+
     const changeTodoListFilter  = (filter: FilterValuesType, todoListId: string) => {
         setTodoLists(todoLists.map((tl) => tl.id === todoListId ? {...tl, filter: filter} : tl ))
     }
