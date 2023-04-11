@@ -1,6 +1,9 @@
 import {TaskType} from "./TodoList";
 import React, {ChangeEvent, FC} from "react";
 import EditableSpan from "../EditableSpan/EditableSpan";
+import {Checkbox, IconButton, ListItem} from "@mui/material";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import {CheckBox} from "@mui/icons-material";
 
 type TasksListPropsType = {
     todoListId: string
@@ -27,23 +30,37 @@ const TasksList = (props: TasksListPropsType) => {
                 props.changeTaskTitle(task.id, title, props.todoListId)
             }
             return (
+                <ListItem key={task.id}
 
-                <li key={task.id}>
+                          disablePadding
+                          secondaryAction={<IconButton
+                              size="small"
 
-                    <input
-                        type="checkbox"
+                              onClick={removeTaskHandler}
+                          >
+                              <DeleteOutlineIcon/>
+                          </IconButton>}
+
+                >
+
+                    <Checkbox
+                        size="small"
+                        color="secondary"
+                        edge="start"
+
                         checked={task.isDone}
                         onChange={changeTaskStatusHandler}
                     />
+
 
                     <EditableSpan
                         title={task.title}
                         spanClasses={`task ${task.isDone ? 'task-done' : ''}`}
                         changeTitle={changeTaskTitleHandler}
                     />
-                    <button onClick={removeTaskHandler}>x</button>
 
-                </li>
+
+                </ListItem>
 
             )
         })

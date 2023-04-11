@@ -1,8 +1,12 @@
-import React, {ChangeEvent, KeyboardEvent, RefObject, useRef, useState} from "react";
+import React from "react";
 import TasksList from "./TasksList";
 import {FilterValuesType} from "../App"
 import AddItemForm from "../AddItemForm/AddItemForm";
 import EditableSpan from "../EditableSpan/EditableSpan";
+import {Button, IconButton} from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+
+
 
 //CRUD
 //R- filter, sort, search
@@ -52,16 +56,25 @@ const TodoList = (props: TodoListPropsType) => {
 
             <div className={"todolist"}>
 
-                <h3><EditableSpan title={props.title} changeTitle={changeTodoListTitle}/>
-                    <button onClick={removeTodoList}>X</button>
+                <h3 className="h3"><EditableSpan title={props.title}
+                                  changeTitle={changeTodoListTitle}/>
+
+                    <IconButton
+                        size="small"
+
+                        onClick={removeTodoList}
+                    >
+                        <DeleteOutlineIcon/>
+                    </IconButton>
 
                 </h3>
 
                 <AddItemForm
                     maxLengthUserMessage={15}
                     addNewItem={addTask}
-
                 />
+
+
                 <TasksList
                     todoListId={props.todolistId}
                     tasks={props.tasks}
@@ -69,18 +82,36 @@ const TodoList = (props: TodoListPropsType) => {
                     changeTaskStatus={props.changeTaskStatus}
                     changeTaskTitle={props.changeTaskTitle}
                 />
+
                 <div className={"filter-btn-container"}>
 
-                    <button
-                        className={props.filter === "all" ? "active-filter-btn" : "filter-btn"}
+                    <Button
+                        size="small"
+                        variant="contained"
+                        disableElevation
+                        color={props.filter === "all" ? "secondary" : "primary"}
+
+
                         onClick={handlerCreator("all")}>All
-                    </button>
-                    <button className={props.filter === "active" ? "active-filter-btn" : "filter-btn"}
+                    </Button>
+                    <Button
+                        size="small"
+                        variant="contained"
+                        disableElevation
+                        color={props.filter === "active" ? "secondary" : "primary"}
+
                             onClick={handlerCreator("active")}>Active
-                    </button>
-                    <button className={props.filter === "completed" ? "active-filter-btn" : "filter-btn"}
+                    </Button>
+                    <Button
+                        size="small"
+                        variant="contained"
+                        disableElevation
+                        color={props.filter === "completed" ? "secondary" : "primary"}
+
+
+
                             onClick={handlerCreator("completed")}>Completed
-                    </button>
+                    </Button>
 
                 </div>
 

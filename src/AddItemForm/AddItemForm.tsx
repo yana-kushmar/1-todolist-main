@@ -1,4 +1,7 @@
 import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
+import {IconButton, TextField} from "@mui/material";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+
 
 
 type AddItemFormPropsType = {
@@ -44,22 +47,28 @@ const AddItemForm: FC<AddItemFormPropsType> = (
         title.length > 15 && <div style={{color: "hotpink"}}>
             Task title is too long </div>
 
-    const inputErrorClasses = error || isUserMessageTooLong ? "input-error" : ""
+
 
 
 
     return (
-        <div>
-            {/* USEREF <input ref={addTaskInput}/>*/}
-            {/*  USEREF <button onClick={addTask}>+</button>*/}
-            <input
+        <div >
+
+            <TextField
+                size="small"
+                error={error}
+
                 value={title}
                 placeholder="Please, enter the title "
                 onChange={changeLocalTitle}
                 onKeyDown={onKeyDownAddItem}
-                className={inputErrorClasses}
+
             />
-            <button disabled={isAddBtnDisable} onClick={addItem}>+</button>
+
+
+            <IconButton  disabled={isAddBtnDisable} onClick={addItem}>
+                <AddBoxIcon/>
+            </IconButton>
             {userMaxLengthMessage}
             {userErrorMessage}
         </div>
