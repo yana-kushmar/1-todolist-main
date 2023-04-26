@@ -7,7 +7,6 @@ import {
     RemoveTodoListActionCreator,
     todolistReducer
 } from "./TodolistReducer";
-import {type} from "os";
 
 test('correct todolist should be removed', () => {
     //

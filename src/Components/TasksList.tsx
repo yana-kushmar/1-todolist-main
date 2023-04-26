@@ -3,7 +3,6 @@ import React, {ChangeEvent, FC} from "react";
 import EditableSpan from "../EditableSpan/EditableSpan";
 import {Checkbox, IconButton, ListItem} from "@mui/material";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import {CheckBox} from "@mui/icons-material";
 
 type TasksListPropsType = {
     todoListId: string

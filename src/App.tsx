@@ -29,7 +29,7 @@ export type FilterValuesType = "all" | "active" | "completed"
 
 }
 
-type TaskStateType = {
+ export type TaskStateType = {
      [todoListId: string]: Array<TaskType>
 }
 type TodoListStateType = TodoListType[]
@@ -66,6 +66,7 @@ const [darkMode, setDarkMode] = useState<boolean>(true)
     // useState - hook which track React
     // hook pulls the state of a component
 
+    // tasks:
     const removeTask = (taskId: string, todoListId: string) => {
         //get next state// set next state
         setTasks({
@@ -85,29 +86,24 @@ const [darkMode, setDarkMode] = useState<boolean>(true)
     const changeTaskStatus = (taskId: string, newIsDone: boolean, todoListId: string) => {
         setTasks({...tasks, [todoListId]: tasks[todoListId].map(el => el.id === taskId ? {...el, isDone: newIsDone} : el) }) //уточить про el.id === taskId
     }
-
-
-
-    const changeTodoListFilter  = (filter: FilterValuesType, todoListId: string) => {
-        setTodoLists(todoLists.map((tl) => tl.id === todoListId ? {...tl, filter: filter} : tl ))
-    }
-
-    const changeTodoListTitle  = (title: string, todoListId: string) => {
-        setTodoLists(todoLists.map((tl) => tl.id === todoListId ? {...tl, title: title} : tl ))
-    }
-
     const changeTaskTitle = (taskId: string, newTitle: string, todoListId: string) => {
         setTasks({...tasks, [todoListId]: tasks[todoListId].map(el => el.id === taskId ? {...el, title: newTitle} : el) }) //уточить про el.id === taskId
 
     }
 
+//todolist:
+    const changeTodoListFilter  = (filter: FilterValuesType, todoListId: string) => {
+        setTodoLists(todoLists.map((tl) => tl.id === todoListId ? {...tl, filter: filter} : tl ))
+    }
+    const changeTodoListTitle  = (title: string, todoListId: string) => {
+        setTodoLists(todoLists.map((tl) => tl.id === todoListId ? {...tl, title: title} : tl ))
+    }
     const removeTodoLists = (todoListId: string) => {
         setTodoLists(todoLists.filter(tl => tl.id !== todoListId))
         const copyTasks = {...tasks}
         delete copyTasks[todoListId]
         setTasks(copyTasks)
     }
-
     const addTodoList = (title: string) => {
         const newTodoListId = v1()
         const newTodoList: TodoListType = {
@@ -120,8 +116,7 @@ const [darkMode, setDarkMode] = useState<boolean>(true)
         setTasks({...tasks, [newTodoListId]: []})
     }
 
-
-
+    //UI
     const getFilteredTasks = (tasks: Array<TaskType>, filter: FilterValuesType): Array<TaskType> => {
         switch (filter) {
 
