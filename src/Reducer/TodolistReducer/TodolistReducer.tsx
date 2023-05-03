@@ -1,6 +1,7 @@
 
 import {TodoListType} from "../../App";
 import {v1} from "uuid";
+import {useState} from "react";
 
 
 
@@ -33,24 +34,26 @@ export type FilterValuesType = "all" | "active" | "completed"
 
 export type ActionType = RemoveTodoListActionType | AddTodoListActionType | ChangeTodoListActionType | ChangeFilterTodoListActionType
 
+const initialState: Array<TodoListType> = []
 
-export const todolistReducer = (todoLists: Array<TodoListType>, action: ActionType): Array<TodoListType> => {
+
+export const todolistReducer = (state: Array<TodoListType> = initialState, action: ActionType): Array<TodoListType> => {
     switch (action.type) {
         case 'REMOVE-TODOLIST':
-            return todoLists.filter(tl => tl.id !== action.id)
+            return state.filter(tl => tl.id !== action.id)
         case "ADD-TODOLIST":
             const newTodoList: TodoListType = {
                 id: action.todoListId,
                 title: action.title,
                 filter: "all",
             }
-            return [...todoLists, newTodoList]
+            return [...state, newTodoList]
         case "CHANGE-TODOLIST-TITLE":
-            return todoLists.map((tl => tl.id === action.id ? {...tl, title: action.title} : tl))
+            return state.map((tl => tl.id === action.id ? {...tl, title: action.title} : tl))
         case "CHANGE-TODOLIST-FILTER":
-            return todoLists.map((tl => tl.id === action.id ? {...tl, filter: action.filter} : tl ))
+            return state.map((tl => tl.id === action.id ? {...tl, filter: action.filter} : tl ))
         default:
-            return todoLists
+            return state
     }
 }
 
