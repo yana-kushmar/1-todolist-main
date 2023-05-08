@@ -1,7 +1,7 @@
-import React, {Reducer, useReducer, useState} from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./Components/TodoList";
-import {v1} from "uuid";
+
 import AddItemForm from "./AddItemForm/AddItemForm";
 import {
     AppBar,
@@ -18,10 +18,10 @@ import {
 } from '@mui/material';
 import {Menu} from '@mui/icons-material';
 import {
-    ActionType, addTodoListActionCreator,
+     addTodoListActionCreator,
     changeTodoListActionCreator,
     changeTodoListFilterActionCreator, removeTodoListActionCreator,
-    todolistReducer
+
 } from "./Reducer/TodolistReducer/TodolistReducer";
 import {
     addTaskActionCreator,
@@ -49,7 +49,6 @@ export type TaskStateType = {
 type TodoListStateType = TodoListType[]
 
 const AppWithRedux = () => {
-
     const todoLists = useSelector<AppRootStateType, TodoListStateType>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TaskStateType>(state => state.tasks)
 
