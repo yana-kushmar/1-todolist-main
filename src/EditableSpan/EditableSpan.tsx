@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useState} from 'react';
+import React, {ChangeEvent, FC, memo, useState} from 'react';
 import {TextField} from "@mui/material";
 
 type EditableSpanPropsType = {
@@ -8,15 +8,10 @@ type EditableSpanPropsType = {
     inputClasses?: string
 }
 
-const EditableSpan: FC<EditableSpanPropsType> = (
-    {
-        title,
-        spanClasses,
-        changeTitle,
-    }
-    ) => {
+const EditableSpan = memo((props: EditableSpanPropsType) => {
+    console.log(EditableSpan)
     const [editMode, setEditMode] =useState<boolean>(false)
-    const [localTitle, setLocalTitle] = useState<string>(title)
+    const [localTitle, setLocalTitle] = useState<string>(props.title)
 
     const changeLocalTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setLocalTitle(e.currentTarget.value)
@@ -27,7 +22,7 @@ const EditableSpan: FC<EditableSpanPropsType> = (
     }
     const offEditMode = () => {
         setEditMode(false)
-        changeTitle(localTitle)
+        props.changeTitle(localTitle)
 
     }
 
@@ -43,10 +38,10 @@ const EditableSpan: FC<EditableSpanPropsType> = (
             onBlur={offEditMode}
             />
             : <span
-                className={spanClasses}
+                className={props.spanClasses}
                 onDoubleClick={onEditMode}
-            >{title}</span>
+            >{props.title}</span>
     );
-};
+})
 
 export default EditableSpan;

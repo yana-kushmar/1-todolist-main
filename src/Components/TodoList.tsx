@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo, useCallback} from "react";
 import TasksList from "./TasksList";
 import {FilterValuesType} from "../App"
 import AddItemForm from "../AddItemForm/AddItemForm";
@@ -17,7 +17,6 @@ type TodoListPropsType = {
     title: string
     filter: FilterValuesType
     tasks: Array<TaskType>
-    //tasks: TaskType[]
 
     removeTask: (taskId: string, todolistId: string) => void
     addTask: (title: string, todolistId: string) => void
@@ -38,18 +37,17 @@ export type TaskType = {
 
 }
 
-const TodoList = (props: TodoListPropsType) => {
-
-
+const TodoList =memo((props: TodoListPropsType) => {
     const handlerCreator = (filter: FilterValuesType) => () => props.changeTodoListFilter(filter, props.todolistId)
     const removeTodoList = () => props.removeTodoLists(props.todolistId)
 
-    const addTask = (title: string) => {
+    const addTask = useCallback((title: string) => {
         props.addTask(title, props.todolistId)
-    }
-    const changeTodoListTitle = (title: string) => {
+    }, [props.addTask, props.todolistId])
+
+    const changeTodoListTitle = useCallback((title: string) => {
         props.changeTodoListTitle(title, props.todolistId)
-    }
+    },[ props.changeTodoListTitle, props.todolistId])
 
     return (
         <div className="App">
@@ -57,11 +55,10 @@ const TodoList = (props: TodoListPropsType) => {
             <div className={"todolist"}>
 
                 <h3 className="h3"><EditableSpan title={props.title}
-                                  changeTitle={changeTodoListTitle}/>
+                                                 changeTitle={changeTodoListTitle}/>
 
                     <IconButton
                         size="small"
-
                         onClick={removeTodoList}
                     >
                         <DeleteOutlineIcon/>
@@ -100,7 +97,7 @@ const TodoList = (props: TodoListPropsType) => {
                         disableElevation
                         color={props.filter === "active" ? "secondary" : "primary"}
 
-                            onClick={handlerCreator("active")}>Active
+                        onClick={handlerCreator("active")}>Active
                     </Button>
                     <Button
                         size="small"
@@ -110,7 +107,7 @@ const TodoList = (props: TodoListPropsType) => {
 
 
 
-                            onClick={handlerCreator("completed")}>Completed
+                        onClick={handlerCreator("completed")}>Completed
                     </Button>
 
                 </div>
@@ -119,6 +116,6 @@ const TodoList = (props: TodoListPropsType) => {
 
         </div>
     );
-}
+})
 
 export default TodoList;

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./Components/TodoList";
 
@@ -57,46 +57,46 @@ const AppWithRedux = () => {
     const [darkMode, setDarkMode] = useState<boolean>(true)
 
     // tasks:
-    const removeTask = (taskId: string, todoListId: string) => {
+    const removeTask = useCallback((taskId: string, todoListId: string) => {
         const action = removeTaskActionCreator(taskId, todoListId)
         dispatch(action)
-    }
-    const addTask = (title: string, todoListId: string) => {
+    },[dispatch])
+
+    const addTask = useCallback((title: string, todoListId: string) => {
         const action = addTaskActionCreator(title, todoListId)
         dispatch(action)
-    }
-    const changeTaskStatus = (taskId: string, newIsDone: boolean, todoListId: string) => {
+    }, [dispatch])
+    const changeTaskStatus = useCallback((taskId: string, newIsDone: boolean, todoListId: string) => {
         const action = changeTaskStatusActionCreator(taskId, newIsDone, todoListId)
         dispatch(action)
-    }
-    const changeTaskTitle = (taskId: string, newTitle: string, todoListId: string) => {
+    },[dispatch])
+    const changeTaskTitle = useCallback((taskId: string, newTitle: string, todoListId: string) => {
         const action = changeTaskTitleActionCreator(taskId, newTitle, todoListId)
         dispatch(action)
-    }
+    },[dispatch])
 
 //todolist:
-    const changeTodoListFilter = (filter: FilterValuesType, todoListId: string) => {
+    const changeTodoListFilter = useCallback((filter: FilterValuesType, todoListId: string) => {
         const action = changeTodoListFilterActionCreator(todoListId, filter)
         dispatch(action)
-    }
-    const changeTodoListTitle = (title: string, todoListId: string) => {
+    },[dispatch])
+    const changeTodoListTitle = useCallback((title: string, todoListId: string) => {
         const action = changeTodoListActionCreator(title, todoListId)
         dispatch(action)
-    }
-    const removeTodoLists = (todoListId: string) => {
+    },[dispatch])
+    const removeTodoLists = useCallback((todoListId: string) => {
         const action = removeTodoListActionCreator(todoListId)
         dispatch(action)
-    }
-    const addTodoList = (title: string) => {
+    },[dispatch])
+    const addTodoList = useCallback((title: string) => {
         const action = addTodoListActionCreator(title)
         dispatch(action)
 
-    }
+    }, [dispatch])
 
 
     const getFilteredTasks = (tasks: Array<TaskType>, filter: FilterValuesType): Array<TaskType> => {
         switch (filter) {
-
             case  "active":
                 return tasks.filter(t => !t.isDone)
 

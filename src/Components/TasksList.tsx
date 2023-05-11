@@ -1,5 +1,5 @@
 import {TaskType} from "./TodoList";
-import React, {ChangeEvent, FC} from "react";
+import React, {ChangeEvent, memo, useCallback} from "react";
 import EditableSpan from "../EditableSpan/EditableSpan";
 import {Checkbox, IconButton, ListItem} from "@mui/material";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -13,9 +13,7 @@ type TasksListPropsType = {
 
 }
 
-const TasksList = (props: TasksListPropsType) => {
-    //const TodoList: FC<TodoListProps> = (props: TodoListType) =>
-
+const TasksList = memo((props: TasksListPropsType) => {
     const tasksItems: JSX.Element[] | JSX.Element = props.tasks.length
         ? props.tasks.map((task) => {
             const taskClasses = ["task"]
@@ -25,9 +23,9 @@ const TasksList = (props: TasksListPropsType) => {
             const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) =>
                 props.changeTaskStatus(task.id, e.currentTarget.checked, props.todoListId)
 
-            const changeTaskTitleHandler = (title: string) => {
+            const changeTaskTitleHandler = useCallback(( title: string) => {
                 props.changeTaskTitle(task.id, title, props.todoListId)
-            }
+            },[ props.changeTaskTitle, task.id])
             return (
                 <ListItem key={task.id}
 
@@ -72,6 +70,6 @@ const TasksList = (props: TasksListPropsType) => {
         </ul>
 
     );
-};
+})
 
 export default TasksList;

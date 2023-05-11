@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, FC, KeyboardEvent, memo, useState} from 'react';
 import {IconButton, TextField} from "@mui/material";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
@@ -9,12 +9,8 @@ type AddItemFormPropsType = {
     addNewItem: (title: string) => void
 }
 
-const AddItemForm: FC<AddItemFormPropsType> = (
-    {
-        maxLengthUserMessage,
-        addNewItem
-    }
-) => {
+const AddItemForm = memo((props: AddItemFormPropsType)  => {
+
     const [title, setTitle] = useState<string>("")
     const [error, setError] = useState<boolean>(false)
 
@@ -26,7 +22,7 @@ const AddItemForm: FC<AddItemFormPropsType> = (
     const addItem = () => {
         const trimmedTitle = title.trim()
         if (trimmedTitle) {
-            addNewItem(trimmedTitle)
+            props.addNewItem(trimmedTitle)
         } else
             setError(true)
         setTitle("")
@@ -39,7 +35,7 @@ const AddItemForm: FC<AddItemFormPropsType> = (
     const userErrorMessage = error &&
         <div style={{color: "hotpink"}}> Title is required </div>
 
-    const isUserMessageTooLong: boolean = title.length > maxLengthUserMessage
+    const isUserMessageTooLong: boolean = title.length > props.maxLengthUserMessage
 
     const isAddBtnDisable = !title.length || isUserMessageTooLong
 
@@ -73,6 +69,6 @@ const AddItemForm: FC<AddItemFormPropsType> = (
             {userErrorMessage}
         </div>
     );
-};
+})
 
 export default AddItemForm;
