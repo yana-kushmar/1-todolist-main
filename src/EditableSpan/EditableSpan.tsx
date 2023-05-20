@@ -9,7 +9,7 @@ type EditableSpanPropsType = {
 }
 
 const EditableSpan = memo((props: EditableSpanPropsType) => {
-    console.log(EditableSpan)
+
     const [editMode, setEditMode] =useState<boolean>(false)
     const [localTitle, setLocalTitle] = useState<string>(props.title)
 

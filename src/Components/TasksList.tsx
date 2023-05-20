@@ -1,4 +1,4 @@
-import {TaskType} from "./TodoList";
+import todoList, {TaskType} from "./TodoList";
 import React, {ChangeEvent, memo, useCallback} from "react";
 import EditableSpan from "../EditableSpan/EditableSpan";
 import {Checkbox, IconButton, ListItem} from "@mui/material";
@@ -14,18 +14,20 @@ type TasksListPropsType = {
 }
 
 const TasksList = memo((props: TasksListPropsType) => {
+    console.log("task")
+
     const tasksItems: JSX.Element[] | JSX.Element = props.tasks.length
         ? props.tasks.map((task) => {
             const taskClasses = ["task"]
             task.isDone && taskClasses.push("task-done")
-            // const taskClasses = task.isDone ? "task task-done" : "task"
             const removeTaskHandler = () => props.removeTask(task.id, props.todoListId)
             const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) =>
                 props.changeTaskStatus(task.id, e.currentTarget.checked, props.todoListId)
 
-            const changeTaskTitleHandler = useCallback(( title: string) => {
+            const changeTaskTitleHandler = ( title: string) => {
                 props.changeTaskTitle(task.id, title, props.todoListId)
-            },[ props.changeTaskTitle, task.id])
+            }
+
             return (
                 <ListItem key={task.id}
 

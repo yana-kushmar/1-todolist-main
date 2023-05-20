@@ -76,6 +76,15 @@ const AppWithRedux = () => {
     },[dispatch])
 
 //todolist:
+    const removeTodoLists = useCallback((todoListId: string) => {
+        const action = removeTodoListActionCreator(todoListId)
+        dispatch(action)
+    },[dispatch])
+    const addTodoList = useCallback((title: string) => {
+        const action = addTodoListActionCreator(title)
+        dispatch(action)
+    }, [dispatch])
+
     const changeTodoListFilter = useCallback((filter: FilterValuesType, todoListId: string) => {
         const action = changeTodoListFilterActionCreator(todoListId, filter)
         dispatch(action)
@@ -84,15 +93,6 @@ const AppWithRedux = () => {
         const action = changeTodoListActionCreator(title, todoListId)
         dispatch(action)
     },[dispatch])
-    const removeTodoLists = useCallback((todoListId: string) => {
-        const action = removeTodoListActionCreator(todoListId)
-        dispatch(action)
-    },[dispatch])
-    const addTodoList = useCallback((title: string) => {
-        const action = addTodoListActionCreator(title)
-        dispatch(action)
-
-    }, [dispatch])
 
 
     const getFilteredTasks = (tasks: Array<TaskType>, filter: FilterValuesType): Array<TaskType> => {

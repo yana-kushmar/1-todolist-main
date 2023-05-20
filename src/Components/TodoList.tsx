@@ -37,17 +37,29 @@ export type TaskType = {
 
 }
 
-const TodoList =memo((props: TodoListPropsType) => {
-    const handlerCreator = (filter: FilterValuesType) => () => props.changeTodoListFilter(filter, props.todolistId)
+const TodoList =  memo((props: TodoListPropsType) => {
+    const handlerCreator = useCallback((filter: FilterValuesType) => () => props.changeTodoListFilter(filter, props.todolistId),[props.changeTodoListFilter, props.todolistId])
     const removeTodoList = () => props.removeTodoLists(props.todolistId)
-
     const addTask = useCallback((title: string) => {
         props.addTask(title, props.todolistId)
     }, [props.addTask, props.todolistId])
-
     const changeTodoListTitle = useCallback((title: string) => {
         props.changeTodoListTitle(title, props.todolistId)
     },[ props.changeTodoListTitle, props.todolistId])
+
+
+    const getFilteredTasks = (tasks: Array<TaskType>, filter: FilterValuesType): Array<TaskType> => {
+        switch (filter) {
+            case  "active":
+                return props.tasks.filter(t => !t.isDone)
+
+            case "completed":
+                return props.tasks.filter(t => t.isDone)
+            default:
+                return tasks
+        }
+    }
+
 
     return (
         <div className="App">
