@@ -63,7 +63,7 @@ const AddItemForm = memo((props: AddItemFormPropsType)  => {
 
 
             <IconButton  disabled={isAddBtnDisable} onClick={addItem}>
-                <AddBoxIcon/>
+                <AddBoxIcon />
             </IconButton>
             {userMaxLengthMessage}
             {userErrorMessage}
