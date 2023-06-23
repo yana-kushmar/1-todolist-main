@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./Components/TodoList";
 
@@ -18,9 +18,9 @@ import {
 } from '@mui/material';
 import {Menu} from '@mui/icons-material';
 import {
-     addTodoListActionCreator,
+    addTodoListActionCreator,
     changeTodoListActionCreator,
-    changeTodoListFilterActionCreator, removeTodoListActionCreator,
+    changeTodoListFilterActionCreator, fetchTodolistThunk, removeTodoListActionCreator, setTodolistAC,
 
 } from "./Reducer/TodolistReducer/TodolistReducer";
 import {
@@ -30,7 +30,8 @@ import {
     tasksReducer
 } from "./Reducer/TaskReducer/TaskReducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./Store/store";
+import {AppRootStateType, useAppDispatch} from "./Store/store";
+import {todolistAPI} from "./api/todolist-api";
 
 
 export type FilterValuesType = "all" | "active" | "completed"
@@ -52,7 +53,16 @@ const AppWithRedux = () => {
     const todoLists = useSelector<AppRootStateType, TodoListStateType>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TaskStateType>(state => state.tasks)
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
+
+
+    useEffect(() => {
+todolistAPI.getTodolist().then((res) => {
+    dispatch(fetchTodolistThunk)
+
+})
+    }, [])
+
 
     const [darkMode, setDarkMode] = useState<boolean>(true)
 

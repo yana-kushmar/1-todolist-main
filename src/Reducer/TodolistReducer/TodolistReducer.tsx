@@ -1,7 +1,9 @@
 
-import {TodoListType} from "../../App";
+import {TodoListType} from "../../AppWithRedux";
 import {v1} from "uuid";
-import {useState} from "react";
+
+import { Dispatch } from "redux";
+import {todolistAPI} from "../../api/todolist-api";
 
 
 
@@ -29,10 +31,21 @@ export type ChangeFilterTodoListActionType = {
 
 }
 
+export type SetTodosActionCreator = {
+    type: 'SET-TODOS',
+    todos: TodoListType[]
+
+}
+
 
 export type FilterValuesType = "all" | "active" | "completed"
 
-export type ActionType = RemoveTodoListActionType | AddTodoListActionType | ChangeTodoListActionType | ChangeFilterTodoListActionType
+export type ActionType =
+    RemoveTodoListActionType
+    | AddTodoListActionType
+    | ChangeTodoListActionType
+    | ChangeFilterTodoListActionType
+    | SetTodosActionCreator
 
 const initialState: Array<TodoListType> = []
 
@@ -52,6 +65,9 @@ export const todolistReducer = (state: Array<TodoListType> = initialState, actio
             return state.map((tl => tl.id === action.id ? {...tl, title: action.title} : tl))
         case "CHANGE-TODOLIST-FILTER":
             return state.map((tl => tl.id === action.id ? {...tl, filter: action.filter} : tl ))
+        case 'SET-TODOS':
+            return action.todos.map((tl) => ({...tl, filter: "all"}))
+
         default:
             return state
     }
@@ -61,5 +77,13 @@ export  const removeTodoListActionCreator = (id: string): RemoveTodoListActionTy
 export  const addTodoListActionCreator = (title: string): AddTodoListActionType => ( {type: "ADD-TODOLIST", title, todoListId: v1()})
 export  const changeTodoListActionCreator = (id: string, title: string): ChangeTodoListActionType => ( {type: "CHANGE-TODOLIST-TITLE", id, title})
 export  const changeTodoListFilterActionCreator = (id: string, filter:FilterValuesType): ChangeFilterTodoListActionType => ( {type: "CHANGE-TODOLIST-FILTER", id, filter})
+export const setTodolistAC = (todos: TodoListType[]): SetTodosActionCreator => ({type: 'SET-TODOS', todos})
 
+
+export const fetchTodolistThunk = (dispatch: Dispatch) => {
+    todolistAPI.getTodolist()
+        .then(res => {
+            dispatch(setTodolistAC(res.data))
+        })
+}
 

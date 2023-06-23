@@ -1,10 +1,13 @@
-import React, {memo, useCallback} from "react";
+import React, {memo, useCallback, useEffect} from "react";
 import TasksList from "./TasksList";
-import {FilterValuesType} from "../App"
+import {FilterValuesType} from "../AppWithRedux"
 import AddItemForm from "../AddItemForm/AddItemForm";
 import EditableSpan from "../EditableSpan/EditableSpan";
 import {Button, IconButton} from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import {fetchTasksThunk} from "../Reducer/TaskReducer/TaskReducer";
+import {useDispatch} from "react-redux";
+import {useAppDispatch} from "../Store/store";
 
 
 
@@ -38,6 +41,13 @@ export type TaskType = {
 }
 
 const TodoList =  memo((props: TodoListPropsType) => {
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(fetchTasksThunk(props.todolistId))
+
+    }, [])
+
     const handlerCreator = useCallback((filter: FilterValuesType) => () => props.changeTodoListFilter(filter, props.todolistId),[props.changeTodoListFilter, props.todolistId])
     const removeTodoList = () => props.removeTodoLists(props.todolistId)
     const addTask = useCallback((title: string) => {
@@ -48,17 +58,17 @@ const TodoList =  memo((props: TodoListPropsType) => {
     },[ props.changeTodoListTitle, props.todolistId])
 
 
-    const getFilteredTasks = (tasks: Array<TaskType>, filter: FilterValuesType): Array<TaskType> => {
-        switch (filter) {
-            case  "active":
-                return props.tasks.filter(t => !t.isDone)
-
-            case "completed":
-                return props.tasks.filter(t => t.isDone)
-            default:
-                return tasks
-        }
-    }
+    // const getFilteredTasks = (tasks: Array<TaskType>, filter: FilterValuesType): Array<TaskType> => {
+    //     switch (filter) {
+    //         case  "active":
+    //             return props.tasks.filter(t => !t.isDone)
+    //
+    //         case "completed":
+    //             return props.tasks.filter(t => t.isDone)
+    //         default:
+    //             return tasks
+    //     }
+    // }
 
 
     return (
