@@ -83,7 +83,25 @@ export const setTodolistAC = (todos: TodoListType[]): SetTodosActionCreator => (
 export const fetchTodolistThunk = (dispatch: Dispatch) => {
     todolistAPI.getTodolist()
         .then(res => {
-            dispatch(setTodolistAC(res.data))
+            dispatch(setTodolistAC(res.data.map(todo => ({
+                id: todo.id,
+                title: todo.title,
+                filter: "all"
+            }))))
         })
 }
 
+export const deleteTodolistThunk =(todoId: string) => (dispatch: Dispatch) => {
+    todolistAPI.deleteTodolist(todoId)
+        .then(res => {
+            dispatch(removeTodoListActionCreator(todoId))
+        })
+}
+
+
+export const deleteTodolistThunk =(todoId: string) => (dispatch: Dispatch) => {
+    todolistAPI.deleteTodolist(todoId)
+        .then(res => {
+            dispatch(removeTodoListActionCreator(todoId))
+        })
+}

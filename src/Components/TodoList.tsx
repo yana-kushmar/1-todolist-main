@@ -5,9 +5,10 @@ import AddItemForm from "../AddItemForm/AddItemForm";
 import EditableSpan from "../EditableSpan/EditableSpan";
 import {Button, IconButton} from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import {fetchTasksThunk} from "../Reducer/TaskReducer/TaskReducer";
-import {useDispatch} from "react-redux";
+import { getTasksThunk} from "../Reducer/TaskReducer/TaskReducer";
+
 import {useAppDispatch} from "../Store/store";
+import {TaskStatuses} from "../api/todolist-api";
 
 
 
@@ -23,7 +24,7 @@ type TodoListPropsType = {
 
     removeTask: (taskId: string, todolistId: string) => void
     addTask: (title: string, todolistId: string) => void
-    changeTaskStatus: (taskId: string, newIsDone: boolean, todolistId: string) => void
+    changeTaskStatus: (taskId: string, status: TaskStatuses, todolistId: string) => void
     changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
 
     changeTodoListFilter: (filter: FilterValuesType, todolistId: string) => void
@@ -35,8 +36,12 @@ type TodoListPropsType = {
 export type TaskType = {
     id: string;
     title: string;
-    isDone: boolean;
-
+    completed: boolean;
+    description?: string
+    status?: number
+    priority?: number
+    startDate?: string | null
+    deadline?: string | null
 
 }
 
@@ -44,7 +49,7 @@ const TodoList =  memo((props: TodoListPropsType) => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        dispatch(fetchTasksThunk(props.todolistId))
+        dispatch(getTasksThunk(props.todolistId))
 
     }, [])
 
@@ -56,19 +61,6 @@ const TodoList =  memo((props: TodoListPropsType) => {
     const changeTodoListTitle = useCallback((title: string) => {
         props.changeTodoListTitle(title, props.todolistId)
     },[ props.changeTodoListTitle, props.todolistId])
-
-
-    // const getFilteredTasks = (tasks: Array<TaskType>, filter: FilterValuesType): Array<TaskType> => {
-    //     switch (filter) {
-    //         case  "active":
-    //             return props.tasks.filter(t => !t.isDone)
-    //
-    //         case "completed":
-    //             return props.tasks.filter(t => t.isDone)
-    //         default:
-    //             return tasks
-    //     }
-    // }
 
 
     return (

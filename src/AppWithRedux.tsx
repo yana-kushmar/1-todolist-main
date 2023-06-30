@@ -20,18 +20,21 @@ import {Menu} from '@mui/icons-material';
 import {
     addTodoListActionCreator,
     changeTodoListActionCreator,
-    changeTodoListFilterActionCreator, fetchTodolistThunk, removeTodoListActionCreator, setTodolistAC,
+    changeTodoListFilterActionCreator,
+    deleteTodolistThunk,
+    fetchTodolistThunk,
+    removeTodoListActionCreator,
+    setTodolistAC,
 
 } from "./Reducer/TodolistReducer/TodolistReducer";
 import {
-    addTaskActionCreator,
-    changeTaskStatusActionCreator, changeTaskTitleActionCreator,
-    removeTaskActionCreator,
-    tasksReducer
+    addTasksThunk,
+     deleteTasksThunk, updateTasksStatusThunk,
+    updateTasksTitleThunk
 } from "./Reducer/TaskReducer/TaskReducer";
-import {useDispatch, useSelector} from "react-redux";
+import { useSelector} from "react-redux";
 import {AppRootStateType, useAppDispatch} from "./Store/store";
-import {todolistAPI} from "./api/todolist-api";
+import {TaskStatuses, todolistAPI} from "./api/todolist-api";
 
 
 export type FilterValuesType = "all" | "active" | "completed"
@@ -67,28 +70,24 @@ todolistAPI.getTodolist().then((res) => {
     const [darkMode, setDarkMode] = useState<boolean>(true)
 
     // tasks:
-    const removeTask = useCallback((taskId: string, todoListId: string) => {
-        const action = removeTaskActionCreator(taskId, todoListId)
-        dispatch(action)
+    const removeTask = useCallback((tasksId: string, todolistId: string) => {
+        dispatch(deleteTasksThunk(todolistId, tasksId))
     },[dispatch])
 
     const addTask = useCallback((title: string, todoListId: string) => {
-        const action = addTaskActionCreator(title, todoListId)
-        dispatch(action)
+        dispatch(addTasksThunk(todoListId, title))
     }, [dispatch])
-    const changeTaskStatus = useCallback((taskId: string, newIsDone: boolean, todoListId: string) => {
-        const action = changeTaskStatusActionCreator(taskId, newIsDone, todoListId)
-        dispatch(action)
+    const changeTaskStatus = useCallback((taskId: string, status:  TaskStatuses, todoListId: string) => {
+
+        dispatch(updateTasksStatusThunk(todoListId, taskId, status))
     },[dispatch])
     const changeTaskTitle = useCallback((taskId: string, newTitle: string, todoListId: string) => {
-        const action = changeTaskTitleActionCreator(taskId, newTitle, todoListId)
-        dispatch(action)
+        dispatch(updateTasksTitleThunk(todoListId, taskId, {title: newTitle}))
     },[dispatch])
 
 //todolist:
     const removeTodoLists = useCallback((todoListId: string) => {
-        const action = removeTodoListActionCreator(todoListId)
-        dispatch(action)
+        dispatch(deleteTodolistThunk(todoListId))
     },[dispatch])
     const addTodoList = useCallback((title: string) => {
         const action = addTodoListActionCreator(title)
@@ -108,10 +107,10 @@ todolistAPI.getTodolist().then((res) => {
     const getFilteredTasks = (tasks: Array<TaskType>, filter: FilterValuesType): Array<TaskType> => {
         switch (filter) {
             case  "active":
-                return tasks.filter(t => !t.isDone)
+                return tasks.filter(t => !t.completed)
 
             case "completed":
-                return tasks.filter(t => t.isDone)
+                return tasks.filter(t => t.completed)
             default:
                 return tasks
         }
